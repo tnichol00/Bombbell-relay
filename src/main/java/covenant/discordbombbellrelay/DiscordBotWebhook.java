@@ -1,11 +1,16 @@
 package covenant.discordbombbellrelay;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
 public class DiscordBotWebhook {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("discordbombbellrelay");
 
     public static void send(String type, String server, int duration) {
         try {
@@ -26,12 +31,12 @@ public class DiscordBotWebhook {
             }
 
             int code = conn.getResponseCode();
-            DiscordBombbellRelay.LOGGER.info("Sent bomb → bot ({})", code);
+            LOGGER.info("Sent bomb → bot ({})", code);
 
             conn.disconnect();
 
         } catch (Exception e) {
-            DiscordBombbellRelay.LOGGER.error("Failed to send bomb: {}", e.getMessage());
+            LOGGER.error("Failed to send bomb: {}", e.getMessage());
         }
     }
 }
