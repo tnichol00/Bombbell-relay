@@ -3,9 +3,9 @@
 	"id": "discord-bombbell-relay",
 	"version": "${version}",
 	"name": "Discord Bombbell Relay",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Shhh..... We don't talk about it",
 	"authors": [
-		"Me!"
+		"SavatarGames, NeoFur"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
