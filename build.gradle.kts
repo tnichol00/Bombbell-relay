@@ -6,6 +6,10 @@ plugins {
 version = providers.gradleProperty("mod_version").get()
 group = providers.gradleProperty("maven_group").get()
 
+base {
+	archivesName = "discord-bombbell-relay-${project.property("minecraft_version")}"
+}
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
