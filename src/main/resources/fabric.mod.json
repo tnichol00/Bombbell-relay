@@ -3,7 +3,7 @@
   "id": "discord-bombbell-relay",
   "version": "${version}",
   "name": "Discord Bombbell Relay",
-  "description": "Relays Wynncraft bomb events to a Discord bot.",
+  "description": "Makes Bomb Bell Public",
   "authors": [
     "SavatarGames"
   ],
