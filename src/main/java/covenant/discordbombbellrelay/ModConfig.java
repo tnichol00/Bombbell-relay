@@ -3,6 +3,6 @@ package covenant.discordbombbellrelay;
 public class ModConfig {
 
     // 🔧 PUT YOUR WEBHOOK URL HERE
-    public static String WEBHOOK_URL = "http://YOUR_SERVER_IP:22139/bomb";
+    public static String WEBHOOK_URL = "fi3.bot-hosting.net:22139";
 
 }
