@@ -1,42 +1,57 @@
 package covenant.discordbombbellrelay;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DiscordBotWebhook {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("discordbombbellrelay");
+    // 🔥 BEST OPTION: small fixed thread pool
+    private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2);
 
-    public static void send(String type, String server, int duration) {
-        try {
-            String json = String.format(
-                    "{\"type\":\"%s\",\"server\":\"%s\",\"duration\":%d}",
-                    type, server, duration
-            );
+    public static void sendAsync(String webhookUrl, String type, String server) {
 
-            HttpURLConnection conn = (HttpURLConnection)
-                    URI.create(ModConfig.getBotUrl()).toURL().openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(json.getBytes(StandardCharsets.UTF_8));
+        EXECUTOR.submit(() -> {
+            try {
+                send(webhookUrl, type, server);
+            } catch (Exception e) {
+                System.out.println("❌ Webhook failed: " + e.getMessage());
             }
+        });
+    }
 
-            int code = conn.getResponseCode();
-            LOGGER.info("Sent bomb → bot ({})", code);
+    // actual HTTP request (runs off-thread)
+    private static void send(String webhookUrl, String type, String server) throws Exception {
 
-            conn.disconnect();
+        URL url = new URL(webhookUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        } catch (Exception e) {
-            LOGGER.error("Failed to send bomb: {}", e.getMessage());
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        String json = String.format(
+                "{\"type\":\"%s\",\"server\":\"%s\",\"duration\":10}",
+                type,
+                server
+        );
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
         }
+
+        int responseCode = conn.getResponseCode();
+
+        if (responseCode != 200 && responseCode != 204) {
+            System.out.println("❌ Bad response: " + responseCode);
+        } else {
+            System.out.println("✅ Sent bomb → bot (" + type + " " + server + ")");
+        }
+
+        conn.disconnect();
     }
 }
