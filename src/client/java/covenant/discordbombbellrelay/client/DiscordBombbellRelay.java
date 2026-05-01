@@ -52,6 +52,6 @@ public class DiscordBombbellRelay implements ClientModInitializer {
 
         LOGGER.info("Detected bomb: {} on {}", bombType, server);
 
-        DiscordBotWebhook.send(bombType, server, duration);
+        DiscordBotWebhook.sendAsync(covenant.discordbombbellrelay.ModConfig.WEBHOOK_URL, bombType, server);
     }
 }
