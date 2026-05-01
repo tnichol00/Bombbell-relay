@@ -9,11 +9,11 @@ import java.util.concurrent.Executors;
 
 public class DiscordBotWebhook {
 
-    // 🔥 BEST OPTION: small fixed thread pool
+    // ✅ small thread pool (best practice)
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(2);
 
+    // ✅ THIS is what you call from your mod
     public static void sendAsync(String webhookUrl, String type, String server) {
-
         EXECUTOR.submit(() -> {
             try {
                 send(webhookUrl, type, server);
@@ -23,7 +23,7 @@ public class DiscordBotWebhook {
         });
     }
 
-    // actual HTTP request (runs off-thread)
+    // 🔒 internal (do NOT call directly)
     private static void send(String webhookUrl, String type, String server) throws Exception {
 
         URL url = new URL(webhookUrl);
@@ -33,6 +33,7 @@ public class DiscordBotWebhook {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
+        // 🔥 matches your Node bot
         String json = String.format(
                 "{\"type\":\"%s\",\"server\":\"%s\",\"duration\":10}",
                 type,
